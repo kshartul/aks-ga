@@ -54,3 +54,12 @@ variable "admin_username" {
   description = "Admin username for cluster nodes."
   default     = "azureuser"
 }
+variable "resource_group_name" {
+  description = "teraaform state file resource group name."
+}
+variable "storage_account_name" {
+  description = "teraaform storage account name."
+}
+
+
+
