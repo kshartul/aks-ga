@@ -28,9 +28,6 @@ jobs:
       with:
        terraform_wrapper: false
 
-    - name: Log in with Azure
-      uses: azure/login@v1
-
     - name: Terraform Init
       #working-directory: aks
       run: terraform init
