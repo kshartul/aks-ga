@@ -38,7 +38,7 @@ jobs:
         - name: Azure CLI script
           uses: azure/CLI@v1
           with:
-            azcliversion: 2.58
+            azcliversion: 2.58.0
             inlineScript: |  
               # Create the resource group
               az group create -n $INFRA_RESOURCE_GROUP -l $LOCATION          
@@ -57,7 +57,7 @@ jobs:
         - name: Login to Azure with SPN
           uses: azure/CLI@v1
           with:
-            azcliversion: 2.27.2
+            azcliversion: 2.58.0
             inlineScript: |
               az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
       
