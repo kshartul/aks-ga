@@ -9,7 +9,7 @@ module "vnet" {
 }
 
 # creating EKS
-module "eks" {
+module "aks" {
   source              = "./modules/kubernetes"
   location            = var.region
   resource_group_name = module.vnet.resource_group_name
@@ -19,7 +19,5 @@ module "eks" {
   min_count           = var.min_node_count
   vnet_subnet_id      = module.vnet.public_subnet_id
   node_vm_size        = var.node_vm_size
-  ad_groups           = var.ad_groups
-  aks_admin_group_object_ids    = var.aks_admin_group_object_ids
 
 }

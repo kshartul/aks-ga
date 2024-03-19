@@ -46,14 +46,3 @@ variable "admin_username" {
   default     = "azureuser"
 }
     
-variable "ad_groups" {
-  description = "ad groups to be used in aks rolebindings"
-  type        = list(string)
-}
-variable "aks_admin_group_object_ids" {
-  description = "aks admin group ids"
-  type        = list(string)
-  default     = [
-    "hello-world@ninja.com"
-  ]
-}
