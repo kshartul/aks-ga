@@ -39,12 +39,10 @@ jobs:
         uses: azure/CLI@v1
         with:
             azcliversion: latest
-            inlineScript: | 
-              az login  
+            inlineScript: |  
               set -a 
               source .env.backend
               az account show    
-              az login 
               az group create \
                 -l $TF_VAR_location \
                 -n $TF_VAR_resource_group_name
