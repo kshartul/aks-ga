@@ -30,27 +30,16 @@ resource "azuread_group" "aks_administrators" {
 
 # creating azure container registry 
 resource "azurerm_container_registry" "acr" {
-  name                = "azure${var.environment}registry"
+  name                = "aks${var.environment}reg"
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Standard"
   admin_enabled       = true
 }
 
-# role assignment for AKS to pull images from ACR
-resource "azurerm_role_assignment" "role_acr_pull" {
-  scope                            = azurerm_container_registry.acr.id
-  role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_kubernetes_cluster.aks-cluster.kubelet_identity[0].object_id
-  skip_service_principal_aad_check = true
-    depends_on = [
-    azurerm_kubernetes_cluster.aks-cluster
-  ]
-}
-
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
-  name                = "${var.environment}-aks-cluster"
+  name                = "${var.environment}-aks-cl01"
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = var.resource_group_name
@@ -103,4 +92,14 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
     balance_similar_node_groups = true
   }
   
+}
+# role assignment for AKS to pull images from ACR
+resource "azurerm_role_assignment" "role_acr_pull" {
+  scope                            = azurerm_container_registry.acr.id
+  role_definition_name             = "AcrPull"
+  principal_id                     =  azurerm_kubernetes_cluster.aks-cluster.kubelet_identity[0].object_id
+  skip_service_principal_aad_check = true
+    depends_on = [
+    azurerm_kubernetes_cluster.aks-cluster
+  ]
 }
