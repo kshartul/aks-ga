@@ -2,19 +2,20 @@ name: 'AKS Deployment'
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
+  #push:
+  #  branches: [ main ]
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   TF_VERSION: 1.3.6
+  LOCATION: eastus2
   INFRA_RESOURCE_GROUP: tfstate-resourcegroup
   TF_STATE_STORAGE_ACCOUNT_NAME: tfstatestorage405
   TF_STATE_CONTAINER_NAME: tfstate
-  TF_STATE_FILE_NAME: aks.tfstate
-  TF_STATE_ACCESS_KEY: ""
+  TF_STATE_FILE_NAME: tfstate
+  TF_STATE_ACCESS_KEY: "" # will be set later
 
 jobs:
   terraform:

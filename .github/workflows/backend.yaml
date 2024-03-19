@@ -1,10 +1,10 @@
 name: Deploy Terraform state backend
 
 on:
-  push:
-    branches: none # [ main ]
-  pull_request:
-    branches:  none # [ release ]
+  #push:
+  #  branches: none # [ main ]
+  #pull_request:
+  #  branches:  none # [ release ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
