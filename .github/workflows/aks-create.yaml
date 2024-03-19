@@ -3,11 +3,6 @@ name: 'AKS Deployment'
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-  pull-requests: write
-
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   #ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -22,26 +17,38 @@ jobs:
       run:
         shell: bash
     steps:
-    - name: Checkout out code 
-      uses: actions/checkout@v3
+      - name: Set short git commit SHA
+        id:   commit
+        uses: prompt/actions-commit-hash@v2
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-       terraform_wrapper: false
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Terraform Init
-      #working-directory: aks
-      run: terraform init
-           
-    - name: Terraform Format
-      #working-directory: aks
-      run: terraform fmt
+      - name: 'Login to  Azure'
+        uses: azure/login@v1   
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  
 
-    - name: Terraform Plan
-      #working-directory: aks
-      run: terraform plan
-    
-    - name: Terraform Apply
-      #working-directory: aks
-      run: terraform apply -auto-approve
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform init
+        id: init
+        run: |
+          set -a 
+          source ../.env.backend
+          terraform init \
+            -backend-config="resource_group_name=$TF_VAR_state_resource_group_name" \
+            -backend-config="storage_account_name=$TF_VAR_state_storage_account_name"
+            
+      - name: Terraform validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color
+
+      - name: Terraform apply
+        id: apply
+        run: terraform apply -auto-approve

@@ -11,8 +11,8 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "aks-infra-rg"
-    storage_account_name = "aksinfra"
+    resource_group_name  = var.state_resource_group_name
+    storage_account_name = var.state_storage_account_name
     container_name       = "aks"
     key                  = "terraform.tfstate"
   }
