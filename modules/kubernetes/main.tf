@@ -85,14 +85,14 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   identity {
     type = "SystemAssigned"
   }
-  
-  
+ 
   linux_profile {
     admin_username = var.admin_username
     ssh_key {
       key_data = tls_private_key.ssh_key.public_key_openssh
     }
   }  
+  
   #RBAC and Azure AD Integration Block
    azure_active_directory_role_based_access_control {
     managed                = true
@@ -106,6 +106,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   auto_scaler_profile {
     balance_similar_node_groups = true
   }
+  
     
 }
 # role assignment for AKS to pull images from ACR

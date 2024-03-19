@@ -53,4 +53,7 @@ variable "ad_groups" {
 variable "aks_admin_group_object_ids" {
   description = "aks admin group ids"
   type        = list(string)
+  default     = [
+    "hello-world@ninja.com"
+  ]
 }
