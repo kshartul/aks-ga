@@ -33,7 +33,6 @@ resource "azurerm_container_registry" "acr" {
   sku                 = "Standard"
   admin_enabled       = true
 }
-
 resource "azuread_group" "groups" {
   for_each         = toset(var.ad_groups)
   display_name     = each.value
@@ -41,6 +40,11 @@ resource "azuread_group" "groups" {
   security_enabled = true
 }
 
+resource "azurerm_role_assignment" "example" {
+  scope                = azurerm_resource_group.aks_rg.id
+  role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
+  principal_id         = azuread_group.aksadmngroup.object_id
+}
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
   name                = "${var.environment}aks-cl01"
@@ -77,6 +81,8 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   identity {
     type = "SystemAssigned"
   }
+  
+  
   linux_profile {
     admin_username = var.admin_username
     ssh_key {
@@ -84,7 +90,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
     }
   }  
   #RBAC and Azure AD Integration Block
-  azure_active_directory_role_based_access_control {
+   azure_active_directory_role_based_access_control {
     managed                = true
     admin_group_object_ids = var.aks_admin_group_object_ids
     azure_rbac_enabled     = true
@@ -96,7 +102,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   auto_scaler_profile {
     balance_similar_node_groups = true
   }
-  
+    
 }
 # role assignment for AKS to pull images from ACR
 resource "azurerm_role_assignment" "role_acr_pull" {
@@ -108,10 +114,17 @@ resource "azurerm_role_assignment" "role_acr_pull" {
     azurerm_kubernetes_cluster.aks-cluster
   ]
 }
-# create Azure AD Group in Active Directory for AKS Admin
+
 resource "azurerm_role_assignment" "admin" {
   for_each = toset(var.aks_admin_group_object_ids)
-  scope = azurerm_kubernetes_cluster.aks-cluster.id
+  scope = azurerm_kubernetes_cluster.aks1.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
   principal_id = each.value
+}
+
+resource "azurerm_role_assignment" "namespace-groups" {
+  for_each = toset(var.ad_groups)
+  scope = azurerm_kubernetes_cluster.aks1.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
+  principal_id = azuread_group.groups[each.value].id
 }

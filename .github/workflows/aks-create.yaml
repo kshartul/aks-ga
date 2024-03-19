@@ -1,9 +1,9 @@
 name: 'AKS Deployment'
 
 on:
-  workflow_dispatch:
-  #push:
-  #  branches: [ main ]
+  #workflow_dispatch:
+  push:
+    branches: [ main ]
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}

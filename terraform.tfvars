@@ -7,6 +7,5 @@ max_node_count              = 4
 min_node_count              = 2
 node_count                  = 2
 node_vm_size                = "Standard_D2_v2"
-aks_admin_group_object_ids  =  ["00000000-0000-0000-0000-000000000000"]
+aks_admin_group_object_ids  = ["00000000-0000-0000-0000-000000000000"]
 ad_groups                   = ["product1", "product2"]
-  

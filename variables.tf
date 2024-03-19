@@ -55,14 +55,15 @@ variable "resource_group_name" {
 #  description = "teraform storage account name."
 #}
 
-variable "aks_admin_group_object_ids" {
-  description = "aks admin group ids"
+variable "cluster_admins" {
+  description = "List of Azure AD object ids that should be cluster admins"
   type        = list(string)
-}
-variable "ad_groups" {
-  description = "ad groups to be used in aks rolebindings"
-  type        = list(string)
+  default     = []
 }
 
-
+variable "azure_rbac_enabled" {
+  description = "Enable Azure RBAC to control authorization"
+  type        = bool
+  default     = true
+}
 
