@@ -12,6 +12,13 @@ terraform {
       version = "~> 2.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "aks-infra-rg"
+    storage_account_name = "aksinfra"
+    container_name       = "aks"
+    key                  = "terraform.tfstate"
+    use_oidc             = true
+  }
 }
 
 # configure the Microsoft Azure Provider
@@ -22,13 +29,5 @@ provider "azurerm" {
 }
 
 # backend
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "aks-infra-rg"
-    storage_account_name = "aksinfra"
-    container_name       = "aks"
-    key                  = "terraform.tfstate"
-  }
-}
 
 data "azurerm_client_config" "current" {}
