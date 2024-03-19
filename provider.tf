@@ -15,7 +15,6 @@ terraform {
     storage_account_name = "aksinfra"
     container_name       = "aks"
     key                  = "terraform.tfstate"
-    #use_oidc             = true
   }
 }
 
@@ -23,7 +22,6 @@ terraform {
 provider "azurerm" {
   #skip_provider_registration = true # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
   features {}
-  #use_oidc = true
 }
 
 # backend
