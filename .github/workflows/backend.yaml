@@ -56,7 +56,7 @@ jobs:
               az storage container create \
                 --name tfstate \
                 --account-name $TF_VAR_state_storage_account_name
-                --account-key $ACCOUNT_KEY
+                --account-key $accountKey
               echo "access_key: $accountKey"
 
      
