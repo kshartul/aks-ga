@@ -36,9 +36,9 @@ jobs:
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
         - name: Azure CLI script
-          uses: azure/CLI@v1
+          uses: azure/CLI@v2
           with:
-            azcliversion: 2.58.0
+            azcliversion: 2.28.1
             inlineScript: |  
               # Create the resource group
               az group create -n $INFRA_RESOURCE_GROUP -l $LOCATION          
@@ -55,9 +55,9 @@ jobs:
               echo "TF_STATE_ACCESS_KEY=$ACCOUNT_KEY" >> $GITHUB_ENV
                 
         - name: Login to Azure with SPN
-          uses: azure/CLI@v1
+          uses: azure/CLI@v2
           with:
-            azcliversion: 2.58.0
+            azcliversion: 2.28.1
             inlineScript: |
               az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
       
