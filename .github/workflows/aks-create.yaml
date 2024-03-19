@@ -38,7 +38,7 @@ jobs:
         - name: Azure CLI script
           uses: azure/CLI@v2
           with:
-            azcliversion: 2.28.1
+            #azcliversion: 2.28.1
             inlineScript: |  
               # Create the resource group
               az group create -n $INFRA_RESOURCE_GROUP -l $LOCATION          
@@ -57,21 +57,21 @@ jobs:
         - name: Login to Azure with SPN
           uses: azure/CLI@v2
           with:
-            azcliversion: 2.28.1
+            #azcliversion: 2.28.1
             inlineScript: |
               az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
       
-
         - name: Terraform init
           id: init
           run: |
               #set -a 
               #source .env.backend
               terraform init \
-                -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME \
+                -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" \
+                -backend-config="container_name=$TF_STATE_CONTAINER_NAME" \
                 -backend-config="access_key=$TF_STATE_ACCESS_KEY" \
-                -backend-config="key=$TF_STATE_FILE_NAME"
-                
+                -backend-config="key=$TF_STATE_FILE_NAME" 
+                  
         - name: Terraform validate
           id: validate
           run: terraform validate -no-color
