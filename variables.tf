@@ -55,5 +55,14 @@ variable "resource_group_name" {
 #  description = "teraform storage account name."
 #}
 
+variable "aks_admin_group_object_ids" {
+  description = "aks admin group ids"
+  type        = list(string)
+}
+variable "ad_groups" {
+  description = "ad groups to be used in aks rolebindings"
+  type        = list(string)
+}
+
 
 

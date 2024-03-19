@@ -19,4 +19,6 @@ module "eks" {
   min_count           = var.min_node_count
   vnet_subnet_id      = module.vnet.public_subnet_id
   node_vm_size        = var.node_vm_size
+  aks_admin_group_object_ids    = var.aks_admin_group_object_ids
+  ad_groups                     = var.ad_groups
 }

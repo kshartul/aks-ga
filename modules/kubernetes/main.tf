@@ -1,3 +1,7 @@
+# backend
+
+data "azurerm_client_config" "current" {}
+
 # RSA key of size 4096 bits
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
@@ -21,13 +25,6 @@ data "azurerm_kubernetes_service_versions" "current" {
   location        = var.location
   include_preview = false
 }
-# create Azure AD Group in Active Directory for AKS Admins
-resource "azuread_group" "aks_administrators" {
-  display_name        = "${var.resource_group_name}-${var.environment}-administrators"
-  description = "Azure AKS Kubernetes administrators for the ${var.resource_group_name}-${var.environment} cluster."
-  security_enabled = true
-}
-
 # creating azure container registry 
 resource "azurerm_container_registry" "acr" {
   name                = "aks${var.environment}reg"
@@ -35,6 +32,13 @@ resource "azurerm_container_registry" "acr" {
   location            = var.location
   sku                 = "Standard"
   admin_enabled       = true
+}
+
+resource "azuread_group" "groups" {
+  for_each         = toset(var.ad_groups)
+  display_name     = each.value
+  owners           = [data.azuread_client_config.current.object_id]
+  security_enabled = true
 }
 
 # creating AKS cluster
@@ -82,8 +86,9 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   #RBAC and Azure AD Integration Block
   azure_active_directory_role_based_access_control {
     managed                = true
-    admin_group_object_ids = [azuread_group.aks_administrators.id]
-   } 
+    admin_group_object_ids = var.aks_admin_group_object_ids
+    azure_rbac_enabled     = true
+  }
   network_profile {
     network_plugin    = "azure"
     load_balancer_sku = "standard"
@@ -102,4 +107,11 @@ resource "azurerm_role_assignment" "role_acr_pull" {
     depends_on = [
     azurerm_kubernetes_cluster.aks-cluster
   ]
+}
+# create Azure AD Group in Active Directory for AKS Admin
+resource "azurerm_role_assignment" "admin" {
+  for_each = toset(var.aks_admin_group_object_ids)
+  scope = azurerm_kubernetes_cluster.aks-cluster.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
+  principal_id = each.value
 }
