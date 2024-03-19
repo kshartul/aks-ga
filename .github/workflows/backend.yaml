@@ -52,8 +52,10 @@ jobs:
                 -l $TF_VAR_location \
                 --sku Standard_LRS \
                 --allow-blob-public-access false
+              ACCOUNT_KEY=$(az storage account keys list --resource-group $TF_VAR_state_resource_group_name --account-name $TF_VAR_state_storage_account_name --query [0].value -o tsv)
               az storage container create \
-                --name aks \
+                --name tfstate \
                 --account-name $TF_VAR_state_storage_account_name
+                --account-key $ACCOUNT_KEY
 
      
