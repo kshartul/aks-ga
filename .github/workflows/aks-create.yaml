@@ -14,7 +14,7 @@ env:
   INFRA_RESOURCE_GROUP: tfstate-resourcegroup
   TF_STATE_STORAGE_ACCOUNT_NAME: tfstatestorage405
   TF_STATE_CONTAINER_NAME: tfstate
-  TF_STATE_FILE_NAME: tfstate
+  TF_STATE_FILE_NAME: akscluster01.tfstate
   TF_STATE_ACCESS_KEY: "" # will be set later
 
 jobs:

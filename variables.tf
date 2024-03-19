@@ -51,9 +51,9 @@ variable "admin_username" {
 variable "resource_group_name" {
   description = "teraform state file resource group name."
 }
-variable "storage_account_name" {
-  description = "teraform storage account name."
-}
+#variable "storage_account_name" {
+#  description = "teraform storage account name."
+#}
 
 
 
