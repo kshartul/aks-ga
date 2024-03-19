@@ -55,12 +55,12 @@ jobs:
 
               echo "TF_STATE_ACCESS_KEY=$ACCOUNT_KEY" >> $GITHUB_ENV
                 
-        - name: Login to Azure with SPN
-          uses: azure/CLI@v2
-          with:
-            #azcliversion: 2.28.1
-            inlineScript: |
-              az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        #- name: Login to Azure with SPN
+        #  uses: azure/CLI@v2
+        #  with:
+        #    #azcliversion: 2.28.1
+        #    inlineScript: |
+        #      az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
       
         - name: Terraform init
           id: init
