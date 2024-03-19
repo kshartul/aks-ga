@@ -39,7 +39,7 @@ resource "azurerm_container_registry" "acr" {
 
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
-  name                = "${var.environment}-aks-cl01"
+  name                = "${var.environment}aks-cl01"
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = var.resource_group_name
@@ -47,7 +47,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   node_resource_group = "${var.environment}-node-group"
 
   default_node_pool {
-    name                = "${var.environment}-pool"
+    name                = "${var.environment}pool"
     node_count          = var.node_count
     vm_size             = var.node_vm_size
     zones               = [1, 2, 3]
