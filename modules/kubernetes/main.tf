@@ -20,6 +20,10 @@ resource "local_file" "public_key" {
   filename = "public_key.pub"
 }
 
+resource "azurerm_resource_group" "aks-rg" {
+  name     = var.resource_group_name
+  location = var.location
+}
 # datasource to get Latest Azure AKS latest Version
 data "azurerm_kubernetes_service_versions" "current" {
   location        = var.location
