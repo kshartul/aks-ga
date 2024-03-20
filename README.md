@@ -11,8 +11,7 @@ Pre-requisite:-
    ACR_PASSWORD
    AZURE_CREDENTIALS 
 
-   AZURE_CREDENTIALS = az ad sp create-for-rbac --name <clustername> --sdk-auth  --role owner --scopes /subscriptions/<id> --json-auth
-
+   AZURE_CREDENTIALS = az ad sp create-for-rbac --name <!clustername> --sdk-auth  --role contributor --scopes /subscriptions/<!id> --json-auth
 
 
 
