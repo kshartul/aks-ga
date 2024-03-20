@@ -4,12 +4,12 @@ on:
     #push:
     #  branches: [ main ]
 env:
-  REGISTRY_NAME: demoaksreg
+  REGISTRY_NAME: aksstagingreg
   IMAGE_NAME: webapp
   IMAGE_TAG: ${{ github.run_number }}
-  CLUSTER_NAME: aks-cluster
-  CLUSTER_RESOURCE_GROUP: demoaksrg
-  NAMESPACE: default    
+  CLUSTER_NAME: stagingaks-cl01
+  CLUSTER_RESOURCE_GROUP: rg-stg-aks
+  NAMESPACE: webapp    
 
 jobs:
   build:
