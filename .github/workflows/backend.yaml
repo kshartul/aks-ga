@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  LOCATION: eastus2
+  LOCATION: 
   INFRA_RESOURCE_GROUP: tfstate-resourcegroup
   TF_STATE_STORAGE_ACCOUNT_NAME: tfstatestorage405
   TF_STATE_CONTAINER_NAME: tfstate
@@ -61,9 +61,9 @@ jobs:
           azcliversion: 2.58
           inlineScript: |  
             # Create the resource group
-            az group create -n $INFRA_RESOURCE_GROUP -l $LOCATION          
+            az group create -n $INFRA_RESOURCE_GROUP          
             # Create the storage account
-            az storage account create -g $INFRA_RESOURCE_GROUP -l $LOCATION \
+            az storage account create -g $INFRA_RESOURCE_GROUP  \
             --name $TF_STATE_STORAGE_ACCOUNT_NAME \
             --sku Standard_LRS \
             --encryption-services blob
