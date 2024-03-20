@@ -6,10 +6,9 @@ Azure Kubernetes Service (AKS) offers the quickest way to start developing and d
 
 Run in the following sequence
 
-1) backend
-2) aks-create
-3) deployment
-4) destroy  - clean
+1) aks-create - creates backend and AKS cluster
+2) deployment - builds docker based images, push to ACR, deploy to AKS cluster
+3) destroy  - clean 
 
 ![AKS](https://github.com/kshartul/aks-ga/blob/main/AKS.webp)
 
