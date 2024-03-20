@@ -36,47 +36,6 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
 }
 
-locals {
-  login_server = azurerm_container_registry.acr.login_server
-  username     = azurerm_container_registry.acr.admin_username
-  password     = azurerm_container_registry.acr.admin_password
-}
-
-locals {
-  dockercreds = {
-    auths = {
-      "${local.login_server}" = {
-        auth = base64encode("${local.username}:${local.password}")
-      }
-    }
-  }
-}
-resource "kubernetes_secret" "docker_credentials" {
-  metadata {
-    name = "docker-credentials"
-  }
-  data = {
-    ".dockerconfigjson" = jsonencode(local.dockercreds)
-  }
-
-  type = "kubernetes.io/dockerconfigjson"
-}
-resource "azuread_group" "aks_administrators" {
-  display_name        = "aks${var.environment}-admin"
-  description = "Kubernetes administrators for the ${var.environment} cluster."
-  security_enabled = true
-}
-data "azurerm_subnet" "public_subnet" {
-  name                 = "aks"
-  virtual_network_name = "${random_pet.primary.id}-vnet"
-  resource_group_name  = var.resource_group_name
-}
-data "azurerm_subnet" "app_gwsubnet" {
-  name                 = "appgw"
-  virtual_network_name = "${random_pet.primary.id}-vnet"
-  resource_group_name  = var.resource_group_name
-}
-
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
   name                = "${var.environment}aks-cl01"
@@ -89,10 +48,6 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   oms_agent {
       #log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
        log_analytics_workspace_id      = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
-    }
-
-    ingress_application_gateway {
-      subnet_id = data.azurerm_subnet.app_gwsubnet.id
     }
  
   default_node_pool {

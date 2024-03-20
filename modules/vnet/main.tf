@@ -66,9 +66,3 @@ resource "azurerm_subnet_network_security_group_association" "nsg_associate_publ
   subnet_id                 = azurerm_subnet.public_subnet.id
   network_security_group_id = azurerm_network_security_group.public_nsg.id
 }
-resource "azurerm_subnet" "app_gwsubnet" {
-  name                 = "${var.environment}-gwsubnet"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefixes     = var.subnet_address_prefix
-}
