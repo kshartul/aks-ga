@@ -1,5 +1,5 @@
 resource_group_name         = "rg-stg-aks"
-region                      = "eastus2"
+region                      = "westeurope"
 vnetCIDR                    = ["10.163.0.0/16"]
 subnetCIDRs                 = ["10.163.0.0/21"]
 environment                 = "staging"
