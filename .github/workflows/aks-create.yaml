@@ -32,7 +32,7 @@ jobs:
           uses: actions/checkout@v2
 
         - name: 'Login to  Azure'
-          uses: azure/login@v1   
+          uses: azure/login@v2   
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}    
         #- name: Login to Azure with SPN
@@ -45,8 +45,6 @@ jobs:
         - name: Terraform init
           id: init
           run: |
-              #set -a 
-              #source .env.backend
               terraform init \
                 -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" \
                 -backend-config="container_name=$TF_STATE_CONTAINER_NAME" \
