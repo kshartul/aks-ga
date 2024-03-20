@@ -7,12 +7,12 @@ Azure Kubernetes Service (AKS) offers the quickest way to start developing and d
 Pre-requisite:-
 1) Service Principle need to have Owners and/or Contributor permissions
 2) Add the following GithHub Actions - repo environment secret variables:
-  * ACR_USERNAME
-  * ACR_PASSWORD
-  * AZURE_CREDENTIALS 
+* ACR_USERNAME
+* ACR_PASSWORD
+* AZURE_CREDENTIALS 
 
-   AZURE_CREDENTIALS:- The JSON output of the given command below in the GithHub Actions secret variables
-   az ad sp create-for-rbac --name CLUSTERNAME --role owner --scopes /subscriptions/SUBSCRIPTIONID --json-auth
+ AZURE_CREDENTIALS:- The JSON output of the given command below in the GithHub Actions secret variables
+ az ad sp create-for-rbac --name CLUSTERNAME --role owner --scopes /subscriptions/SUBSCRIPTIONID --json-auth
 
 
 
