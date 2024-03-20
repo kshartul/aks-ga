@@ -11,9 +11,10 @@ Pre-requisite:-
 * ACR_PASSWORD
 * AZURE_CREDENTIALS 
 
- AZURE_CREDENTIALS:- The JSON output of the given command below in the GithHub Actions secret variables
+ AZURE_CREDENTIALS:- Put the JSON output of the given command below in the GithHub Actions secret variables
+ ```
  az ad sp create-for-rbac --name CLUSTERNAME --role owner --scopes /subscriptions/SUBSCRIPTIONID --json-auth
-
+ ```
 
 
 Run in the following sequence
