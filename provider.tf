@@ -3,9 +3,8 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.94.0"
+      version = "3.96.0"
     }
-    required_version = ">= 1.1.0"
   }
   backend "azurerm" {
     #resource_group_name  = "aksstracc01" #var.state_resource_group_name
