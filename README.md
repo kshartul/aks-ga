@@ -26,4 +26,4 @@ Run in the following sequence
 
 ![AKS](https://github.com/kshartul/aks-ga/blob/main/AKS.webp)
 
-Read detailed overview and practical [here](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/images/aks.svg)
+Read detailed overview and practical [here](https://learn.microsoft.com/en-us/azure/aks/kubernetes-action)
