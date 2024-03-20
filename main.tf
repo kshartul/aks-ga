@@ -12,7 +12,7 @@ module "log_analytics_workspace" {
   source                           = "./modules/loganalytics"
   name                             = var.log_analytics_workspace_name
   location                         = var.region
-  resource_group_name              = var.resource_group_name
+  resource_group_name              = module.vnet.resource_group_name
 }
 
 # creating EKS
