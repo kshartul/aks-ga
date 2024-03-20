@@ -1,3 +1,6 @@
+
+resource "random_pet" "primary" {}
+
 resource "azurerm_log_analytics_workspace" "insights" {
   name                = "logs-${random_pet.primary.id}"
   location            = var.location
@@ -13,7 +16,6 @@ resource "azurerm_log_analytics_solution" "Log_Analytics_Solution_ContainerInsig
   resource_group_name   = var.resource_group_name
   workspace_resource_id = azurerm_log_analytics_workspace.insights.id
   workspace_name        = azurerm_log_analytics_workspace.insights.name
-
   plan {
     publisher = "Microsoft"
     product   = "OMSGallery/ContainerInsights"

@@ -156,7 +156,7 @@ resource "azurerm_role_assignment" "role_acr_pull" {
 data "azurerm_resource_group" "node_resource_group" {
   name = azurerm_kubernetes_cluster.aks-cluster.node_resource_group
   depends_on = [
-    azurerm_kubernetes_cluster.k8saks-cluster
+    azurerm_kubernetes_cluster.aks-cluster
   ]
 }
 
@@ -171,7 +171,7 @@ resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
 
 resource "azurerm_monitor_diagnostic_setting" "settings" {
   name                       = "DiagnosticsSettings"
-  target_resource_id         = azurerm_kubernetes_cluster.aks_cluster.id
+  target_resource_id         = azurerm_kubernetes_cluster.aks-cluster.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
 
   enabled_log {
