@@ -54,3 +54,14 @@ variable "resource_group_name" {
 #variable "storage_account_name" {
 #  description = "teraform storage account name."
 #}
+
+variable "log_analytics_workspace_name" {
+  description = "Specifies the name of the log analytics workspace"
+  default     = "BaboAksWorkspace"
+  type        = string
+}
+variable "log_analytics_retention_days" {
+  description = "Specifies the number of days of the retention policy"
+  type        = number
+  default     = 30
+}

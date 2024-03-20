@@ -13,7 +13,6 @@ module "log_analytics_workspace" {
   name                             = var.log_analytics_workspace_name
   location                         = var.region
   resource_group_name              = var.resource_group_name
-  solution_plan_map                = var.solution_plan_map
 }
 
 # creating EKS

@@ -7,3 +7,4 @@ max_node_count              = 4
 min_node_count              = 2
 node_count                  = 2
 node_vm_size                = "Standard_D2_v2"
+log_analytics_workspace_name = "aks-loganalyics-ws"

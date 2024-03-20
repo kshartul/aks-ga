@@ -7,17 +7,15 @@ resource "azurerm_log_analytics_workspace" "insights" {
    
 }
 
-resource "azurerm_log_analytics_solution" "Log_Analytics_Solution_ContainerInsights" {
-  for_each = var.solution_plan_map
-  solution_name         = each.key
+resource "azurerm_log_analytics_solution" "Log_Analytics_Solution_ContainerInsights" {  
+  solution_name         = "ContainerInsights"
   location              = azurerm_log_analytics_workspace.insights.location
   resource_group_name   = var.resource_group_name
   workspace_resource_id = azurerm_log_analytics_workspace.insights.id
   workspace_name        = azurerm_log_analytics_workspace.insights.name
 
-   plan {
-    product   = each.value.product
-    publisher = each.value.publisher
+  plan {
+    publisher = "Microsoft"
+    product   = "OMSGallery/ContainerInsights"
   }
-
 }
