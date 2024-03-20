@@ -49,3 +49,15 @@ variable "log_analytics_workspace_id" {
   description = "(Optional) The ID of the Log Analytics Workspace which the OMS Agent should send data to. Must be present if enabled is true."
   type        = string
 }
+
+variable "oms_agent" {
+  description = "Specifies the OMS agent addon configuration."
+  type        = object({
+    enabled                     = bool           
+    log_analytics_workspace_id  = string
+  })
+  default     = {
+    enabled                     = true
+    log_analytics_workspace_id  = null
+  }
+}
