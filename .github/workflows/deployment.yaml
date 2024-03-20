@@ -1,0 +1,75 @@
+name: Deploy to AKS Cluster
+on:
+  pull_request:
+    branches:
+    - master
+env:
+  REGISTRY_NAME: demoaksreg
+  IMAGE_NAME: webapp
+  IMAGE_TAG: ${{ github.run_number }}
+  CLUSTER_NAME: aks-cluster
+  CLUSTER_RESOURCE_GROUP: demoaksrg
+  NAMESPACE: default    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set short git commit SHA
+        id:   commit
+        uses: prompt/actions-commit-hash@v2
+
+      - name: Checkout
+        uses: actions/checkout@v2 
+      
+      - name:  #Connect to Azure Container registry (ACR)
+        uses: Azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: Build Docker Image
+        run:
+          docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache
+            
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        with:
+          image-ref: 'docker.io/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'MEDIUM,HIGH,CRITICAL'
+
+      - name: Push Image to Azure Container Registry 
+        run: |
+            docker push ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'  
+          
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+      
+      - name: Create secret in Kubernetes cluster    
+        uses: Azure/k8s-create-secret@v1
+        with:
+          container-registry-url:  ${{ env.REGISTRY_NAME }}.azurecr.io
+          container-registry-username: ${{ secrets.ACR_USERNAME }}
+          container-registry-password: ${{ secrets.ACR_PASSWORD }}
+          secret-name: k8s-secret
+  
+      - name: Deploy to Kubernetes cluster    
+        uses: Azure/k8s-deploy@v1
+        with:
+          manifests: |
+            k8s/deployment.yaml
+            k8s/service.yaml
+          images: |
+            ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+          imagepullsecrets: |
+            k8s-secret
+          action: deploy  

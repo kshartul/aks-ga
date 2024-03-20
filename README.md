@@ -4,6 +4,12 @@
 
 Azure Kubernetes Service (AKS) offers the quickest way to start developing and deploying cloud-native apps in Azure, datacenters, or at the edge with built-in code-to-cloud pipelines and guardrails. Get unified management and governance for on-premises, edge, and multi-cloud Kubernetes clusters. Interoperate with Azure security, identity, cost management, and migration services.
 
+Run in the following sequence
+
+1) backend
+2) aks-create
+3) deployment
+4) destroy  - clean
 
 ![AKS](https://github.com/kshartul/aks-ga/blob/main/AKS.webp)
 
