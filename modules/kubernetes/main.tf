@@ -55,7 +55,6 @@ resource "kubernetes_secret" "docker_credentials" {
   metadata {
     name = "docker-credentials"
   }
-
   data = {
     ".dockerconfigjson" = jsonencode(local.dockercreds)
   }
@@ -67,27 +66,6 @@ resource "azuread_group" "aks_administrators" {
   description = "Kubernetes administrators for the ${var.environment} cluster."
   security_enabled = true
 }
-
-resource "azurerm_log_analytics_workspace" "insights" {
-  name                = "logs-${random_pet.primary.id}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  retention_in_days   = 30
-  sku                 = "PerGB2018"
-}
-resource "azurerm_log_analytics_solution" "Log_Analytics_Solution_ContainerInsights" {
-  solution_name         = "ContainerInsights"
-  location              = azurerm_log_analytics_workspace.insights.location
-  resource_group_name   = var.resource_group_name
-  workspace_resource_id = azurerm_log_analytics_workspace.insights.id
-  workspace_name        = azurerm_log_analytics_workspace.insights.name
-
-  plan {
-    publisher = "Microsoft"
-    product   = "OMSGallery/ContainerInsights"
-  }
-}
-
 data "azurerm_subnet" "public_subnet" {
   name                 = "aks"
   virtual_network_name = "${random_pet.primary.id}-vnet"
@@ -98,13 +76,7 @@ data "azurerm_subnet" "app_gwsubnet" {
   virtual_network_name = "${random_pet.primary.id}-vnet"
   resource_group_name  = var.resource_group_name
 }
-data "azurerm_log_analytics_workspace" "workspace" {
-  depends_on = [
-    azurerm_log_analytics_workspace.insights
-  ]
-  name                = "${random_pet.primary.id}-la"
-  resource_group_name = var.resource_group_name
-}
+
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
   name                = "${var.environment}aks-cl01"
@@ -115,8 +87,9 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   node_resource_group = "${var.environment}-node-group"
   
   oms_agent {
-    
-      log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
+      msi_auth_for_monitoring_enabled = true
+      #log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
+       log_analytics_workspace_id      = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
     }
 
     ingress_application_gateway {
@@ -194,4 +167,42 @@ resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   depends_on = [
     azurerm_kubernetes_cluster.aks-cluster
   ]
+}
+
+resource "azurerm_monitor_diagnostic_setting" "settings" {
+  name                       = "DiagnosticsSettings"
+  target_resource_id         = azurerm_kubernetes_cluster.aks_cluster.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
+
+  enabled_log {
+    category = "kube-apiserver"
+  }
+
+  enabled_log {
+    category = "kube-audit"
+  }
+
+  enabled_log {
+    category = "kube-audit-admin"
+  }
+
+  enabled_log {
+    category = "kube-controller-manager"
+  }
+
+  enabled_log {
+    category = "kube-scheduler"
+  }
+
+  enabled_log {
+    category = "cluster-autoscaler"
+  }
+
+  enabled_log {
+    category = "guard"
+  }
+
+  metric {
+    category = "AllMetrics"
+  }
 }

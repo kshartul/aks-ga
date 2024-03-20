@@ -7,6 +7,14 @@ module "vnet" {
   subnet_address_prefix = var.subnetCIDRs
   environment           = var.environment
 }
+#creating log analytics
+module "log_analytics_workspace" {
+  source                           = "./modules/loganalytics"
+  name                             = var.log_analytics_workspace_name
+  location                         = var.region
+  resource_group_name              = var.resource_group_name
+  solution_plan_map                = var.solution_plan_map
+}
 
 # creating EKS
 module "aks" {
@@ -19,5 +27,6 @@ module "aks" {
   min_count           = var.min_node_count
   vnet_subnet_id      = module.vnet.public_subnet_id
   node_vm_size        = var.node_vm_size
-
+  log_analytics_workspace_id  = module.log_analytics_workspace.id
 }
+

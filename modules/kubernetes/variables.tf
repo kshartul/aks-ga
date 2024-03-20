@@ -44,5 +44,8 @@ variable "kubernetes_cluster_rbac_enabled" {
 variable "admin_username" {
   description = "Admin username for cluster nodes."
   default     = "azureuser"
+}  
+variable "log_analytics_workspace_id" {
+  description = "(Optional) The ID of the Log Analytics Workspace which the OMS Agent should send data to. Must be present if enabled is true."
+  type        = string
 }
-    
