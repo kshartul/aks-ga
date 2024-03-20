@@ -87,7 +87,6 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   node_resource_group = "${var.environment}-node-group"
   
   oms_agent {
-      msi_auth_for_monitoring_enabled = true
       #log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
        log_analytics_workspace_id      = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
     }
