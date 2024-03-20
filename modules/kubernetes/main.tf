@@ -65,6 +65,7 @@ resource "kubernetes_secret" "docker_credentials" {
 resource "azuread_group" "aks_administrators" {
   display_name        = "aks${var.environment}-admin"
   description = "Kubernetes administrators for the ${var.environment} cluster."
+  security_enabled = true
 }
 
 resource "azurerm_log_analytics_workspace" "insights" {
@@ -86,6 +87,24 @@ resource "azurerm_log_analytics_solution" "Log_Analytics_Solution_ContainerInsig
     product   = "OMSGallery/ContainerInsights"
   }
 }
+
+data "azurerm_subnet" "public_subnet" {
+  name                 = "aks"
+  virtual_network_name = "${random_pet.primary.id}-vnet"
+  resource_group_name  = var.resource_group_name
+}
+data "azurerm_subnet" "app_gwsubnet" {
+  name                 = "appgw"
+  virtual_network_name = "${random_pet.primary.id}-vnet"
+  resource_group_name  = var.resource_group_name
+}
+data "azurerm_log_analytics_workspace" "workspace" {
+  depends_on = [
+    azurerm_log_analytics_workspace.insights
+  ]
+  name                = "${random_pet.primary.id}-la"
+  resource_group_name = var.resource_group_name
+}
 # creating AKS cluster
 resource "azurerm_kubernetes_cluster" "aks-cluster" {
   name                = "${var.environment}aks-cl01"
@@ -96,13 +115,14 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   node_resource_group = "${var.environment}-node-group"
   
   oms_agent {
+    
       log_analytics_workspace_id = data.azurerm_log_analytics_workspace.insights.id
     }
-  
-  ingress_application_gateway {
-    subnet_id = azurerm_subnet.app_gwsubnet.id
-  }
 
+    ingress_application_gateway {
+      subnet_id = data.azurerm_subnet.app_gwsubnet.id
+    }
+ 
   default_node_pool {
     name                = "${var.environment}pool"
     node_count          = var.node_count
@@ -174,55 +194,4 @@ resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   depends_on = [
     azurerm_kubernetes_cluster.aks-cluster
   ]
-}
-resource "azurerm_monitor_workspace" "az-mon-ws" {
-  name                = "amon-${random_pet.primary}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-}
-
-resource "azurerm_monitor_data_collection_endpoint" "az-mon-dc" {
-  name                = "msprom--${random_pet.primary}-${azurerm_kubernetes_cluster.aks-cluster.name}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  kind                = "Linux"
-}
-
-resource "azurerm_monitor_data_collection_rule" "az-dc-rule" {
-  name                        = "msprom--${random_pet.primary}-${azurerm_kubernetes_cluster.aks-cluster.name}"
-  resource_group_name         = var.resource_group_name
-  location                    = var.location
-  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.az-mon-dc.id
-
-  data_sources {
-    prometheus_forwarder {
-      name    = "PrometheusDataSource"
-      streams = ["Microsoft-PrometheusMetrics"]
-    }
-  }
-
-  destinations {
-    monitor_account {
-      monitor_account_id = azurerm_monitor_workspace.az-mon-ws.id
-      name               = azurerm_monitor_workspace.az-mon-ws.name
-    }
-  }
-
-  data_flow {
-    streams      = ["Microsoft-PrometheusMetrics"]
-    destinations = [azurerm_monitor_workspace.az-mon-ws.name]
-  }
-}
-
-# associate to a Data Collection Rule
-resource "azurerm_monitor_data_collection_rule_association" "az_dcr_to_aks" {
-  name                    = "dcr-${azurerm_kubernetes_cluster.aks-cluster.name}"
-  target_resource_id      = azurerm_kubernetes_cluster.aks-cluster.id
-  data_collection_rule_id = azurerm_monitor_data_collection_rule.az-dc-rule.id
-}
-
-# associate to a Data Collection Endpoint
-resource "azurerm_monitor_data_collection_rule_association" "az_dce_to_aks" {
-  target_resource_id          = azurerm_kubernetes_cluster.aks-cluster.id
-  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.az-mon-dc.id
 }
