@@ -1,8 +1,8 @@
 name: Deploy to AKS Cluster
 on:
-  pull_request:
-    branches:
-    - master
+  workflow_dispatch:
+    #push:
+    #  branches: [ main ]
 env:
   REGISTRY_NAME: demoaksreg
   IMAGE_NAME: webapp
