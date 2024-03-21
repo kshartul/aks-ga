@@ -27,7 +27,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}  
       
-      - name:  #Connect to Azure Container registry (ACR)
+      - name:  Connect to Azure Container registry (ACR)
         uses: Azure/docker-login@v1
         with:
           login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
       - name: Build Docker Image
         run:
-          docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache
+          docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} e
             
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
