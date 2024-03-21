@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
       - name: Build Docker Image
         run:
-          docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} e
+          docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
             
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
