@@ -27,7 +27,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}  
       
-      - name:  #Connect to Azure Container registry (ACR)
+      - name:  Connect to Azure Container registry (ACR)
         uses: Azure/docker-login@v1
         with:
           login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
