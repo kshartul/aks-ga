@@ -1,0 +1,50 @@
+kubectl get ns
+kubectl get nodes -o wide
+az aks machine list --resource-group rg-stg-aks --cluster-name  stagingaks-cl01--nodepool-name nodepool1 -o table
+az aks machine list --resource-group rg-stg-aks --cluster-name  stagingaks-cl01 --nodepool-name aks-stagingpool-21514835-vmss000000 -o table
+az aks machine list --resource-group rg-stg-aks --cluster-name  stagingaks-cl01 --nodepool-name stagingpool -o table
+c:
+cd shart
+cd .ssh
+vi id_rsa.pub
+cat
+vim
+vim id_rsa.pub
+d:
+vim protected_settings.json
+az vmss extension set  \
+    --resource-group rg-stg-aks \
+    --vmss-name rg-stg-aks \
+    --name VMAccessForLinux \
+    --publisher Microsoft.OSTCExtensions \
+    --version 1.4 \
+    --protected-settings protected_settings.json
+az vmss extension set --resource-group rg-stg-aks --vmss-name rg-stg-aks --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings protected_settings.json
+az vmss extension set --resource-group staging-node-group --vmss-name rg-stg-aks --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings protected_settings.json
+az login
+az vmss extension set --resource-group staging-node-group --vmss-name rg-stg-aks --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings protected_settings.json
+az vmss extension set --resource-group rg-stg-aks --vmss-name rg-stg-aks --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings protected_settings.json
+az vmss extension set --resource-group rg-stg-aks --vmss-name aks-stagingpool-21514835-vmss --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings protected_settings.json
+SCALE_SET_NAME=$(az vmss list --resource-group $CLUSTER_RESOURCE_GROUP --query [0].name -o tsv)
+az vmss extension set --resource-group staging-node-group --vmss-name aks-stagingpool-21514835-vmss --name VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 --protected-settings  protected_settings.json
+az vmss update-instances --instance-ids ‘*’  --resource-group  staging-node-group --name aks-stagingpool-21514835-vmss
+az vmss update-instances --instance-ids ‘*’ --resource-group  staging-node-group --name aks-stagingpool-21514835-vmss
+az vmss update-instances --instance-ids '*' --resource-group  staging-node-group --name aks-stagingpool-21514835-vmss
+az vmss update-instances --instance-ids * --resource-group  staging-node-group --name aks-stagingpool-21514835-vmss
+ssh -i id_rsa azureuser@10.163.0.33
+c:
+ssh -i id_rsa azureuser@10.163.0.33
+ssh -i id_rsa.pem azureuser@10.163.0.33
+ssh -i id_rsa azureuser@10.163.0.33
+d:
+kubectl run -it aks-ssh --image=alpine
+  kubectl attach aks-ssh-758c76dd4d-lfhpk -c aks-ssh -i -t
+kubectl cp C:\Users\shart\.ssh\id_rsa aks-ssh:id_rsa -c aks-ssh-758c76dd4d-lfhpk
+kubectl cp C:\Users\shart\.ssh\id_rsa aks-ssh-758c76dd4d-lfhpk:id_rsa -c aks-ssh-758c76dd4d-lfhpk
+kubectl cp C:\Users\shart\.ssh\id_rsa aks-ssh-758c76dd4d-lfhpk:id_rsa 
+  kubectl attach aks-ssh-758c76dd4d-lfhpk -c aks-ssh -i -t
+git add .
+git commit -m "Update the Read"
+git push
+az aks get-credentials --resource-group rg-stg-aks --name stagingaks-cl01
+doskey /history > filename.txt
