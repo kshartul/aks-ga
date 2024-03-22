@@ -26,7 +26,8 @@ spec:
     spec:
       containers:
       - name: githubactions-aks-demo
-        image: wannabeegeek/githubactions-aks-demo
+        image: __DOCKER_REPOSITORY__/__IMAGE_NAME__:__IMAGE_TAG__
+        #image:__REGISTRY_NAME__.azurecr.io/__IMAGE_NAME__:__TAG__
         imagePullSecrets:
       - name: k8s-secret
         resources:
