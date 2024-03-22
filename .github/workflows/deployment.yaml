@@ -1,8 +1,8 @@
 name: Deploy to AKS Cluster
 on:
-  workflow_dispatch:
-    #push:
-    #  branches: [ main ]
+  #workflow_dispatch:
+  push:
+      branches: [ main ]
 env:
   REGISTRY_NAME: aksstagingreg
   IMAGE_NAME: webapp
