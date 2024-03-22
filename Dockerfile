@@ -4,11 +4,11 @@ FROM python:latest
 
 WORKDIR /build
 
-COPY app /build
+COPY ./app /build
 
 #COPY app/requirements.txt /build/
 
-#RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /build/requirements.txt
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /build/requirements.txt
 
 EXPOSE 5000
 
