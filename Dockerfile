@@ -2,9 +2,7 @@ FROM python:3.9.0
 
 WORKDIR /build
 
-#ADD app /build 
 COPY requirements.txt .
-#COPY app/requirements.txt /build/
 
 COPY  . .
 

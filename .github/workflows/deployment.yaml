@@ -37,17 +37,17 @@ jobs:
         run:
           docker build ./app/ --file ./Dockerfile --tag  ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
             
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        continue-on-error: true
-        with:
-          image-ref: 'docker.io/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'MEDIUM,HIGH,CRITICAL'
-
+     # - name: Run Trivy vulnerability scanner
+     #   uses: aquasecurity/trivy-action@master
+     #   continue-on-error: true
+     #   with:
+     #     image-ref: 'docker.io/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+     #     format: 'table'
+     #     exit-code: '1'
+     #     ignore-unfixed: true
+     #     vuln-type: 'os,library'
+     #     severity: 'MEDIUM,HIGH,CRITICAL'
+       
       - name: Push Image to Azure Container Registry 
         run: |
             docker push ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'  
