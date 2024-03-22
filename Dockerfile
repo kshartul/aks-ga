@@ -4,7 +4,7 @@ FROM python:latest
 
 WORKDIR /build
 
-COPY ./app /build
+COPY app/* /build
 
 #COPY app/requirements.txt /build/
 
